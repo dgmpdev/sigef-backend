@@ -35,5 +35,5 @@ public class ActionActivte extends AuditableEntity
     private ActionActivte action;
 
     @Transient
-    private AuditableEntity auditableEntity;//khkh
+    private AuditableEntity auditableEntity;
 }
