@@ -31,7 +31,4 @@ public class CritereEvaluation extends AuditableEntity
     private CritereEvaluation aspect;
 
     private int critNumOrdre;
-
-    @Transient
-    private AuditableEntity auditableEntity;
 }

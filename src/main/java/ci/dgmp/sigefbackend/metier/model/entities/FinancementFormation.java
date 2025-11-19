@@ -30,7 +30,4 @@ public class FinancementFormation extends AuditableEntity
     @ManyToOne
     @JoinColumn(name = "FORMATION_ID")
     private Formation finFormation;
-
-    @Transient
-    private AuditableEntity auditableEntity;
 }

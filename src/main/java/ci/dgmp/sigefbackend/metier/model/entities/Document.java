@@ -47,7 +47,4 @@ public class Document extends AuditableEntity
     private Long docTableId;
 
     private String docTableName;
-
-    @Transient
-    private AuditableEntity auditableEntity;
 }

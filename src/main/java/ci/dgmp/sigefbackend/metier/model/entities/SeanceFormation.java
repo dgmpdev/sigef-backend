@@ -29,7 +29,4 @@ public class SeanceFormation extends AuditableEntity
     private LocalDateTime sfDateFin;
 
     private String sfDescription;
-
-    @Transient
-    private AuditableEntity auditableEntity;
 }

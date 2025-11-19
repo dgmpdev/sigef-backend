@@ -47,7 +47,4 @@ public class Participant extends AuditableEntity
     @ManyToOne
     @JoinColumn(name = "SEANCE_ID")
     private SeanceFormation partSeance;
-
-    @Transient
-    private AuditableEntity auditableEntity;
 }

@@ -1,5 +1,6 @@
 package ci.dgmp.sigefbackend.metier.model.entities;
 
+import ci.dgmp.sigefbackend.admin.types.model.entities.Type;
 import jakarta.persistence.*;
 import ci.dgmp.sigefbackend.admin.security.audit.AuditableEntity;
 import lombok.AllArgsConstructor;
@@ -21,19 +22,13 @@ public class ActionActivte extends AuditableEntity
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACTION_ACTIVITE_ID_GEN")
     @SequenceGenerator(name = "ACTION_ACTIVITE_ID_GEN", sequenceName = "ACTION_ACTIVITE_ID_SEQ", initialValue = 1)
     private Long actId;
-
     private String actLibelle;
-
-    @ManyToOne
-    @JoinColumn(name = "ACT_GESTION_ID")
+    @ManyToOne @JoinColumn(name = "ACT_GESTION_ID")
     private Gestion actGestion;
-
     private int actNumOrdre;
-
     @ManyToOne
     @JoinColumn(name = "ACTION_PARENT_ID")
     private ActionActivte action;
-
-    @Transient
-    private AuditableEntity auditableEntity;
+    @ManyToOne @JoinColumn(name = "ACT_TYPE_CODE")
+    private Type actType;
 }

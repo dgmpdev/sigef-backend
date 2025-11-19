@@ -35,7 +35,4 @@ public class Formation extends AuditableEntity
     private int formNumOrdre;
 
     private String attribute1;
-
-    @Transient
-    private AuditableEntity auditableEntity;
 }

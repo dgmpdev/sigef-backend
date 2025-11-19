@@ -25,7 +25,4 @@ public class Gestion extends AuditableEntity
     private boolean gesCourant;
 
     private String gesLibelle;
-
-    @Transient
-    private AuditableEntity auditableEntity;
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/affaires")
+@RequestMapping("/demandes")
 @RequiredArgsConstructor
 @ResponseStatus(HttpStatus.OK)
 public class DemandeController {

@@ -39,7 +39,4 @@ public class Demande extends AuditableEntity
     @ManyToOne
     @JoinColumn(name = "DEM_STATUT_ID")
     private Type demStatut;
-
-    @Transient
-    private AuditableEntity auditableEntity;
 }

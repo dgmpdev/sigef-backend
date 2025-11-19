@@ -30,7 +30,4 @@ public class ProgrammeFormation extends AuditableEntity
     @ManyToOne
     @JoinColumn(name = "STATUT_ID")
     private Type progFormStatut;
-
-    @Transient
-    private AuditableEntity auditableEntity;
 }

@@ -29,7 +29,4 @@ public class CategorieModule extends AuditableEntity
     @ManyToOne
     @JoinColumn(name = "CATEGORIE_PARENT_ID")
     private CategorieModule categorie;
-
-    @Transient
-    private AuditableEntity auditableEntity;
 }

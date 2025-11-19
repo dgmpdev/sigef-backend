@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -113,7 +114,7 @@ public class UserController
 
     @GetMapping("/list/visible")
     @RolesAllowed("GET_USR")
-    public java.util.List<UserDTO> getVisibleUsers()
+    public List<UserDTO> getVisibleUsers()
     {
         return userService.getVisibleUsers();
     }

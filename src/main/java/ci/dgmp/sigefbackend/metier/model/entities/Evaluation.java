@@ -41,7 +41,4 @@ public class Evaluation extends AuditableEntity
     @ManyToOne
     @JoinColumn(name = "PROGRAMME_ID")
     private ProgrammeFormation evalProgramme;
-
-    @Transient
-    private AuditableEntity auditableEntity;
 }

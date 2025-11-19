@@ -38,7 +38,4 @@ public class DetailDemande extends AuditableEntity
     @ManyToOne
     @JoinColumn(name = "FORMATION_ID")
     private Formation detDemFormation;
-
-    @Transient
-    private AuditableEntity auditableEntity;
 }

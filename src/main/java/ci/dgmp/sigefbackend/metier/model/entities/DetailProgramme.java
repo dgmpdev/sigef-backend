@@ -48,7 +48,4 @@ public class DetailProgramme extends AuditableEntity
     @ManyToOne
     @JoinColumn(name = "MODULE_ID")
     private CategorieModule module;
-
-    @Transient
-    private AuditableEntity auditableEntity;
 }
