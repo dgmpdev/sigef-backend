@@ -1,4 +1,4 @@
-package ci.dgmp.sigefbackend.metier.controller.services;
+package ci.dgmp.sigefbackend.metier.service.interfaces;
 
 import ci.dgmp.sigefbackend.metier.model.dtos.GestionDTO;
 import org.springframework.data.domain.Page;

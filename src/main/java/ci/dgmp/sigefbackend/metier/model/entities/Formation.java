@@ -18,21 +18,15 @@ import org.hibernate.envers.Audited;
 public class Formation extends AuditableEntity
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FORMATION_ID_GEN")
-    @SequenceGenerator(name = "FORMATION_ID_GEN", sequenceName = "FORMATION_ID_SEQ", initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FORMATION_ID_SEQ")
+    @SequenceGenerator(name = "FORMATION_ID_SEQ", sequenceName = "FORMATION_ID_SEQ", allocationSize = 1)
     private Long formId;
-
     private String formCible;
-
     private String formDescriptionCible;
-
     private String formTheme;
-
     private String formPeriode;
-
     private int formNbrParticipant;
-
     private int formNumOrdre;
-
-    private String attribute1;
+    @ManyToOne @JoinColumn(name = "ACTIVITE_ID")
+    private ActionActivte activte;
 }

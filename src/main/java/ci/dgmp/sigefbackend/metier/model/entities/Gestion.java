@@ -8,21 +8,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity
-@Table(name = "gestion")
-@Audited
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Entity @Table(name = "gestion") @Audited
 public class Gestion extends AuditableEntity
 {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GESTION_ID_GEN")
     @SequenceGenerator(name = "GESTION_ID_GEN", sequenceName = "GESTION_ID_SEQ", initialValue = 1)
     private Long gesCode;
-
     private boolean gesCourant;
-
     private String gesLibelle;
+
+    public Gestion(Long gesCode)
+    {
+        this.gesCode = gesCode;
+    }
 }

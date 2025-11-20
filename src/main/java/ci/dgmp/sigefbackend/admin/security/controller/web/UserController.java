@@ -22,7 +22,7 @@ public class UserController
 {
     private final IUserService userService;
 
-    @PostMapping(value = "/open/login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/public/login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public AuthResponse login(@Valid @ConvertGroup(to = LoginGroup.class) @RequestBody UserDTO user)
     {
         return userService.login(user);
@@ -60,7 +60,7 @@ public class UserController
         userService.changePassword(user);
     }
 
-    @PutMapping(value = "/open/reset-password", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/public/reset-password", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void resetPassword(@Valid @ConvertGroup(to = ResetPasswordGroup.class) @RequestBody UserDTO user)
     {
         userService.resetPassword(user);
@@ -96,7 +96,7 @@ public class UserController
         userService.sendResetPasswordEmail(userId);
     }
 
-    @PostMapping(value = "/open/send-reset-password-email", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/public/send-reset-password-email", produces = MediaType.APPLICATION_JSON_VALUE)
     public void envoyerEmailReinitialisation(@Valid @ConvertGroup(to = SendResetPasswordEmailGroup.class) @RequestBody UserDTO dto)
     {
         userService.sendResetPasswordEmail(dto.getEmail());

@@ -1,6 +1,7 @@
-package ci.dgmp.sigefbackend.metier.controller.services;
+package ci.dgmp.sigefbackend.metier.service.implementation;
 
 import ci.dgmp.sigefbackend.admin.exceptions.AppException;
+import ci.dgmp.sigefbackend.metier.service.interfaces.IGestionService;
 import ci.dgmp.sigefbackend.metier.model.dtos.GestionDTO;
 import ci.dgmp.sigefbackend.metier.model.entities.Gestion;
 import ci.dgmp.sigefbackend.metier.model.mappers.GestionMapper;

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
-@RequestMapping("/open/mail")
+@RequestMapping("/public/mail")
 public class MailTestController
 {
     @Autowired

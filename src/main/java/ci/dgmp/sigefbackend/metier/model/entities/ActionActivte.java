@@ -9,13 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity
-@Table(name = "action_activite")
-@Audited
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Entity @Table(name = "action_activite") @Audited
 public class ActionActivte extends AuditableEntity
 {
     @Id
@@ -26,9 +21,13 @@ public class ActionActivte extends AuditableEntity
     @ManyToOne @JoinColumn(name = "ACT_GESTION_ID")
     private Gestion actGestion;
     private int actNumOrdre;
-    @ManyToOne
-    @JoinColumn(name = "ACTION_PARENT_ID")
+    @ManyToOne @JoinColumn(name = "ACTION_PARENT_ID")
     private ActionActivte action;
     @ManyToOne @JoinColumn(name = "ACT_TYPE_CODE")
     private Type actType;
+
+    public ActionActivte(Long actId)
+    {
+        this.actId = actId;
+    }
 }

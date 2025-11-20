@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-@ExistingGesCode(groups = {UpdateGroup.class})
-@UniqueGesLibelle(groups = {UpdateGroup.class})
+@ExistingGesCode(groups = {UpdateGroup.class}) @UniqueGesLibelle(groups = {UpdateGroup.class})
 public class GestionDTO
 {
     @UniqueGesCode(groups = {CreateGroup.class}, allowNull = true)
