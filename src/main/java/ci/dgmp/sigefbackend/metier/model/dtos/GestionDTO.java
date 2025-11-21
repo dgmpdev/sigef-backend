@@ -19,4 +19,5 @@ public class GestionDTO
     private boolean gesCourant;
     @UniqueGesLibelle(groups = {CreateGroup.class})
     private String gesLibelle;
+    private String statut;
 }

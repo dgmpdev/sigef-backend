@@ -52,8 +52,8 @@ public class MailConfig
     @Value("${spring.mail.properties.mail.smtp.starttls.required:false}")
     Boolean startTls;
 
-    @Value("${spring.mail.properties.mail.smtp.ssl.trust:false}")
-    Boolean trustAll;
+    @Value("${spring.mail.properties.mail.smtp.ssl.trust}")
+    String sslTrust;
 
     @Value("${spring.mail.properties.mail.smtp.from:}")
     String bounceAddress;
@@ -85,7 +85,7 @@ public class MailConfig
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", tlsEnabled.toString());
         props.put("mail.smtp.starttls.required", startTls.toString());
-        props.put("mail.smtp.ssl.trust", trustAll.toString());
+        props.put("mail.smtp.ssl.trust", sslTrust.toString());
         props.put("mail.smtp.timeout", timeout.toMillis());
         props.put("mail.smtp.connectiontimeout", connectionTimeout.toMillis());
         props.put("mail.smtp.writetimeout", writeTimeout.toMillis());

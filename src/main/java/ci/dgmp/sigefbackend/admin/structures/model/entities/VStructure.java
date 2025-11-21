@@ -19,10 +19,8 @@ import org.hibernate.annotations.Subselect;
 @ToString
 @DynamicUpdate
 @DynamicInsert @Immutable // la vue ne sera pas modifiée
-@Subselect("select 1 as str_id")
 public class VStructure
 {
-
     @Id
     @EqualsAndHashCode.Include
     private Long strId;

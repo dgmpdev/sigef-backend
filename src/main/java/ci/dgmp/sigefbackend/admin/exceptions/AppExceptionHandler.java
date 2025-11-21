@@ -14,77 +14,113 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestControllerAdvice @RequiredArgsConstructor
+@RestControllerAdvice
+@RequiredArgsConstructor
 public class AppExceptionHandler
 {
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public List<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException err)
-    {
-        List<String> errorMessages = new ArrayList<>();
+    /** -----------------------------------
+     *  STRUCTURE DE LA REPONSE D'ERREUR
+     *  ----------------------------------- */
+    private record ApiError(
+            LocalDateTime timestamp,
+            int status,
+            String error,
+            List<String> messages
+    ) {}
 
-        err.getGlobalErrors().forEach(e->{
-            String gErr = e.getDefaultMessage();
-            if(gErr != null && gErr.contains("::")) errorMessages.add(gErr.split("::")[1]);
-            if(gErr != null && !gErr.contains("::")) errorMessages.add(gErr);
-        });
-        err.getBindingResult().getFieldErrors().forEach(e->errorMessages.add(e.getDefaultMessage()));
-        return errorMessages;
+    private ResponseEntity<ApiError> buildResponse(HttpStatus status, List<String> messages) {
+        return ResponseEntity.status(status).body(
+                new ApiError(LocalDateTime.now(), status.value(), status.getReasonPhrase(), messages)
+        );
     }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public List<String> handleAppException(AppException err)
-    {
-        List<String> errorMessages = new ArrayList<>();
-        errorMessages.add(err.getMessage());
-        return errorMessages;
-    }
+    /** -----------------------------------
+     *  VALIDATION DES DTO ( @Valid )
+     *  ----------------------------------- */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
 
-    @ExceptionHandler()
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public List<String> handleAuthException(AuthenticationException exception)
-    {
-        List<String> errorMessages = new ArrayList<>();
-        String errMsg = exception instanceof DisabledException ?
-                "Votre compte a bien été créé mais n'est pas encore activé.\nPour recevoir un lien d'activation, veillez cliquer sur le lien ci-dessous." :
-                exception instanceof LockedException ? "Compte bloqué" :
-                exception instanceof InsufficientAuthenticationException ? exception.getMessage() : "Username ou mot de passe incorrect";
-        errorMessages.add(errMsg);
-        return errorMessages;
-    }
-
-    @ExceptionHandler()
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public String handleJwtExpirationException(ExpiredJwtException exception)
-    {
-        return "EXPIRED_TOKEN";
-    }
-
-    @ExceptionHandler()
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public void handleAuthException(Exception exception) throws UnknownHostException {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        exception.printStackTrace(pw);
-        String stacktrace = sw.toString();
-        exception.printStackTrace();
-    }
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<List<String>> handleConstraintViolationException(ConstraintViolationException ex) {
-        // Convertir les violations en une liste de messages
-        List<String> errors = ex.getConstraintViolations().stream()
-                .map(violation -> violation.getMessage())
+        List<String> errors = ex.getBindingResult()
+                .getAllErrors()
+                .stream()
+                .map(err -> {
+                    String msg = err.getDefaultMessage();
+                    if (msg != null && msg.contains("::"))
+                        return msg.split("::")[1];
+                    return msg;
+                })
                 .collect(Collectors.toList());
 
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return buildResponse(HttpStatus.BAD_REQUEST, errors);
+    }
+
+    /** -----------------------------------
+     *  EXCEPTIONS MÉTIER (AppException)
+     *  ----------------------------------- */
+    @ExceptionHandler(AppException.class)
+    public ResponseEntity<ApiError> handleAppException(AppException ex) {
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, List.of(ex.getMessage()));
+    }
+
+    /** -----------------------------------
+     *  AUTHENTICATION / LOGIN
+     *  ----------------------------------- */
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiError> handleAuthException(AuthenticationException ex) {
+
+        String message =
+                ex instanceof DisabledException ?
+                        "Votre compte a bien été créé mais n'est pas encore activé.\nPour recevoir un lien d'activation, veuillez cliquer sur le lien ci-dessous."
+                        :
+                        ex instanceof LockedException ?
+                                "Compte bloqué."
+                                :
+                                ex instanceof InsufficientAuthenticationException ?
+                                        ex.getMessage()
+                                        :
+                                        "Identifiants incorrects.";
+
+        return buildResponse(HttpStatus.UNAUTHORIZED, List.of(message));
+    }
+
+    /** -----------------------------------
+     *  JWT EXPIRE
+     *  ----------------------------------- */
+    @ExceptionHandler(ExpiredJwtException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<ApiError> handleJwtExpiration(ExpiredJwtException ex) {
+        return buildResponse(HttpStatus.FORBIDDEN, List.of("EXPIRED_TOKEN"));
+    }
+
+    /** -----------------------------------
+     *  CONSTRAINTS VALIDATOR ( @NotBlank @Min ... )
+     *  ----------------------------------- */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiError> handleConstraintViolation(ConstraintViolationException ex) {
+        List<String> errors = ex.getConstraintViolations()
+                .stream()
+                .map(v -> v.getMessage())
+                .collect(Collectors.toList());
+
+        return buildResponse(HttpStatus.BAD_REQUEST, errors);
+    }
+
+    /** -----------------------------------
+     *  CATCH-ALL : ULTIME FILET DE SECURITÉ
+     *  ----------------------------------- */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiError> handleAll(Exception ex) {
+
+        // Log serveur - indispensable
+        ex.printStackTrace();
+
+        return buildResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                List.of("Une erreur interne est survenue. Veuillez réessayer plus tard.")
+        );
     }
 }

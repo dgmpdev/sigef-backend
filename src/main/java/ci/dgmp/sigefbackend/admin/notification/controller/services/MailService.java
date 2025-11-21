@@ -9,6 +9,7 @@ import ci.dgmp.sigefbackend.admin.notification.model.entities.EmailNotification;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -35,16 +36,18 @@ public class MailService implements MailServiceInterface
     private final MailConfig mailConfig;
     private final EmailNotificationRepo emailNotificationRepo;
     private final MailMapper mailMapper;
+    @Value("${front.adress}")
+    private String frontAddress;
 
     @Override
     public CompletableFuture<MailResponse> envoyerEmailActivation(String destinataire, String nomDestinataire, String lienActivation)
     {
-        String sujet = "Activation de votre compte e-courrier";
+        String sujet = "Activation de votre compte SIGEF";
 
         // Charger le fichier HTML d'activation
         String corpsHtml = chargerTemplateHtml("templates/emails/activation-email.html")
                 .replace("${nomDestinataire}", nomDestinataire)
-                .replace("${lienActivation}", lienActivation);
+                .replace("${lienActivation}", frontAddress + lienActivation);
 
         MailRequest mailRequest = MailRequest.builder()
                 .to(destinataire)

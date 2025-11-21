@@ -233,7 +233,6 @@ public class UserService implements IUserService
     {
         AppUser user = userRepo.findByUsername(dto.getEmail());
         if(user == null) throw new AppException("nom d'utilisateur ou mot de passe incorrect");
-
         user.setLastLogin(LocalDateTime.now());
         user = userRepo.save(user);
         return jwtService.getTokens(user);

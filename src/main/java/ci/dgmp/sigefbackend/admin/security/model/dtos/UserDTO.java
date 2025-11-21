@@ -38,14 +38,14 @@ public class UserDTO
     @NotBlockedUser(groups = {LoginGroup.class})
     @ExistingEmail(allowNull = true, groups = {LoginGroup.class, SendResetPasswordEmailGroup.class})
     private String email;
-    //@NotNull(message = "Le matricule de l'utilisateur ne peut pas être nul", groups = {CreateGroup.class})
+    @NotNull(message = "Le matricule de l'utilisateur ne peut pas être nul", groups = {CreateGroup.class})
     @UniqueMatricule
     private String matricule;
     @ExistingGradeCode(message = "Grade inconnu", groups = {CreateGroup.class, UpdateGroup.class}, allowNull = true)
     private String gradeCode;
-    @NotNull(message = "Le prénom ne peut pas être nul")
+    @NotNull(message = "Le prénom ne peut pas être nul", groups = {CreateGroup.class, UpdateGroup.class})
     private String firstName;
-    @NotNull(message = "Le nom de famille ne peut pas être nul")
+    @NotNull(message = "Le nom de famille ne peut pas être nul", groups = {CreateGroup.class, UpdateGroup.class})
     private String lastName;
     @NotNull(message = "Le numéro de téléphone ne peut pas être nul", groups = {CreateGroup.class, UpdateGroup.class})
     @UniqueTel(message = "Le numéro de téléphone est déjà utilisé", groups = {CreateGroup.class})

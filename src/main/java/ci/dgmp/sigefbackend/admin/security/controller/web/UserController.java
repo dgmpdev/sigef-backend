@@ -12,18 +12,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@Validated
 public class UserController
 {
     private final IUserService userService;
 
     @PostMapping(value = "/public/login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public AuthResponse login(@Valid @ConvertGroup(to = LoginGroup.class) @RequestBody UserDTO user)
+    @Validated({LoginGroup.class})
+    public AuthResponse login(@Valid @RequestBody UserDTO user)
     {
         return userService.login(user);
     }
@@ -41,8 +44,8 @@ public class UserController
         return userService.createUser(user);
     }
 
-    @PostMapping(value = "/create-with-profile", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @RolesAllowed("CRT_USR")
+    @PostMapping(value = "/public/create-with-profile", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    //@RolesAllowed("CRT_USR")
     public UserDTO createUserWithProfile(@Valid @ConvertGroup(to = CreateGroup.class) @RequestBody CreateUserDTO user)
     {
         return userService.createUserWithProfile(user);
@@ -84,8 +87,9 @@ public class UserController
         userService.unblockUser(userId);
     }
 
-    @PutMapping(value = "/activate", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void activateAccount(@Valid @ConvertGroup(to = ActivateAccountGroup.class) @RequestBody UserDTO user)
+    @Validated({ActivateAccountGroup.class})
+    @PutMapping(value = "/public/activate", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void activateAccount(@Valid @RequestBody UserDTO user)
     {
         userService.activateAccount(user);
     }
