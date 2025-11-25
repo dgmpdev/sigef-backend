@@ -9,9 +9,12 @@ import ci.dgmp.sigefbackend.metier.repositories.GestionRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -39,9 +42,10 @@ public class GestionService implements IGestionService
     }
 
     @Override
-    public Page<GestionDTO> search(String key, PageRequest pageRequest)
+    public Page<GestionDTO> search(String key, List<String> staCodes, Pageable pageable)
     {
-        return gestionRepository.search(key, pageRequest);
+        if (staCodes == null || staCodes.isEmpty()) return gestionRepository.search(key, pageable);
+        return gestionRepository.search(key, staCodes, pageable);
     }
 
     @Override

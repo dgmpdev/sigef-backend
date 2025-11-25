@@ -20,4 +20,11 @@ public class GestionDTO
     @UniqueGesLibelle(groups = {CreateGroup.class})
     private String gesLibelle;
     private String statut;
+
+    public GestionDTO(Long gesCode, boolean gesCourant, String gesLibelle)
+    {
+        this.gesCode = gesCode;
+        this.gesCourant = gesCourant;
+        this.gesLibelle = gesLibelle;
+    }
 }

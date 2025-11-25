@@ -10,15 +10,30 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface GestionRepo extends JpaRepository<Gestion, Long> {
 
     @Query("""
-        select new ci.dgmp.sigefbackend.metier.model.dtos.GestionDTO(g.gesCode, g.gesCourant, g.gesLibelle)
+        select new ci.dgmp.sigefbackend.metier.model.dtos.GestionDTO(g.gesCode, g.gesCourant, g.gesLibelle, g.gesStatut.code)
         from Gestion g
         where (
-            locate(upper(coalesce(:key, '')), upper(cast(function('unaccent', coalesce(g.gesLibelle, '')) as string))) > 0
-            or locate(upper(coalesce(:key, '')), upper(cast(function('unaccent', coalesce(concat(g.gesCode, ''), '')) as string))) > 0
+               
+            (locate(upper(coalesce(:key, '')), upper(function('unaccent', coalesce(g.gesLibelle, '')))) > 0
+            or locate(upper(coalesce(:key, '')), upper(function('unaccent', coalesce(concat(g.gesCode, ''), '')))) > 0)
+            and g.gesStatut.code in :staCodes
+        )
+        """)
+    Page<GestionDTO> search(@Param("key") String key, @Param("staCodes")List<String> staCodes, Pageable pageable);
+
+    @Query("""
+        select new ci.dgmp.sigefbackend.metier.model.dtos.GestionDTO(g.gesCode, g.gesCourant, g.gesLibelle, g.gesStatut.code)
+        from Gestion g
+        where (
+               
+            (locate(upper(coalesce(:key, '')), upper(function('unaccent', coalesce(g.gesLibelle, '')))) > 0
+            or locate(upper(coalesce(:key, '')), upper(function('unaccent', coalesce(concat(g.gesCode, ''), '')))) > 0)
         )
         """)
     Page<GestionDTO> search(@Param("key") String key, Pageable pageable);

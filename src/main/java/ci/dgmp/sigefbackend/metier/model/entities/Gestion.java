@@ -1,5 +1,6 @@
 package ci.dgmp.sigefbackend.metier.model.entities;
 
+import ci.dgmp.sigefbackend.admin.types.model.entities.Type;
 import jakarta.persistence.*;
 import ci.dgmp.sigefbackend.admin.security.audit.AuditableEntity;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,8 @@ public class Gestion extends AuditableEntity
     private Long gesCode;
     private boolean gesCourant;
     private String gesLibelle;
+    @ManyToOne @JoinColumn(name = "GES_STA_CODE")
+    private Type gesStatut;
 
     public Gestion(Long gesCode)
     {
