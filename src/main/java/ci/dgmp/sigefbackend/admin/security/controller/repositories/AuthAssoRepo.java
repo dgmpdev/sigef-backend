@@ -32,14 +32,14 @@ public interface AuthAssoRepo extends JpaRepository<AuthAssociation, Long>
     List<AppAuthority> findProfileRolesEntities(@Param("profileCode") String profileCode);
 
     @Query(value = """
-        select distinct vpp.privilege_code as authority_code
-        from v_profile_privilege vpp 
-        where vpp.profile_code = :profileCode
+        select distinct vpp.privilegeCode as authority_code
+        from VProfilePrivilege vpp 
+        where vpp.profileCode = :profileCode
         union
-        select distinct vpr.role_code as authority_code
-        from v_profile_role vpr 
-        where vpr.profile_code = :profileCode
-        """, nativeQuery = true)
+        select distinct vpr.roleCode as authority_code
+        from VProfileRole vpr 
+        where vpr.profileCode = :profileCode
+        """)
     Set<String> findAuthoritiesByProfileCode(@Param("profileCode") String profileCode);
 
     @Query("select count(a) > 0 from AuthAssociation a where a.role.code = :roleCode and a.privilege.code = :privilegeCode")

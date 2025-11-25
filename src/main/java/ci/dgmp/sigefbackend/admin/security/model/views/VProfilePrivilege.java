@@ -16,7 +16,7 @@ import org.hibernate.annotations.Immutable;
 @Setter
 @Entity
 @Immutable
-@Table(name = "v_profile_privilege")
+@Table(name = "v_profile_privilege", schema = "sigef")
 public class VProfilePrivilege
 {
     @Id
